@@ -1,0 +1,28 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.hero {
+    display: flex;
+    gap: 20px;
+}
+
+.heroCard {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.title_container,
+.author_container,
+.pages_container,
+.readStatus_container {
+    display: flex;
+    justify-content: space-between;
+    /* border-bottom: solid 1px black; */
+    /* gap: 20px; */
+}
