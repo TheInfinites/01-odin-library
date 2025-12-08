@@ -33,8 +33,9 @@ const bla = document.querySelector(".hero");
 
 function creatingDivs(title, author, pages, idd, read) {
     const heroCard = document.createElement("div")
-    heroCard.className = `heroCard`;
+    heroCard.className = "heroCard";
     heroCard.id = `h${idd}`;
+    heroCard.dataset.id = `${idd}`;
     bla.appendChild(heroCard);
     const getHeroCard = document.querySelector(`#h${idd}`);
 
@@ -123,6 +124,24 @@ function creatingDivs(title, author, pages, idd, read) {
     readInfo.className = "readInfo";
     readInfo.textContent = read;
     getReadStatusContainer.appendChild(readInfo);
+
+    
+    /////////////////////////////
+
+    // del button container
+    const delBtnContainter = document.createElement("div");
+    delBtnContainter.classList = `delBtnContainer`;
+    delBtnContainter.id = `d${idd}`;
+    getHeroCard.appendChild(delBtnContainter);
+    const getDelBtnCont = document.querySelector(`#d${idd}`);
+
+    // del button
+    const delBtn = document.createElement("button");
+    delBtn.classList = "delete_button";
+    delBtn.textContent = "del";
+    delBtn.dataset.id = `${idd}`;
+    getDelBtnCont.appendChild(delBtn); 
+
     
 }
 
@@ -133,6 +152,7 @@ function loopinThrough () {
         console.log(i)
         creatingDivs(book.name, book.author, book.pages, book.id, book.readStatus);
         i++;
+
     })
 
     // for (let i = 0; i < myLibrary.length; i++){
@@ -140,46 +160,67 @@ function loopinThrough () {
     // }
 }
 
-// console.log(loopinThrough());
-
-const form = document.querySelector(".form-book");
-
-
-// getting and setting data from the form 
-form.addEventListener("submit", function(e){
-    e.preventDefault();
-    
-    const book_name = document.querySelector("#book_name").value;
-    const author_name = document.querySelector("#author_name").value;
-    const pages = document.querySelector("#pages").value;
-    const readStatus = document.querySelector("#status").value;
-
-    // const getHeroCard = document.querySelector(".heroCard");
-    // getHeroCard.remove();
-    myLibrary.length = 0;
-    addBookToLibary(book_name, author_name, pages, readStatus);
-    loopinThrough();
-
-});
 
 
 loopinThrough();
 
 
-myLibrary.forEach(stuff => {
-    const getRead = document.querySelectorAll(".readStatus_container");
+function delStatus (){
 
-    getRead.forEach(read => {
-        read.addEventListener("mouseup", (e) => {
-            console.log("yes!")
-            // console.log(stuff.id);
+    let getRead = document.querySelectorAll(".delete_button");
+    
+    myLibrary.forEach(stuff => {
+    
+        getRead.forEach(read => {
+            read.addEventListener("mouseup", (e) => {
+                console.log("yes!")
+                // console.log(stuff.id);
+    
+                if(stuff.id == read.dataset.id){
+                    console.log("yay!");
+                    console.log(stuff.name);
+                    // console.log(myLibrary)
 
-
-            if(stuff.id == read.dataset.id){
-                console.log("yay!");
-            }
-
+                    const delDiv = document.querySelector(`[id*=h${stuff.id}]`);
+                    delDiv.remove();
+                    // rmeoving book from the object 
+                    let index = myLibrary.findIndex(user => user.id == stuff.id);
+                    myLibrary.splice(index, 1);
+                    
+                }
+    
+            })
         })
+    
     })
 
-})
+}
+
+delStatus();
+
+function getFormData (){
+
+    const form = document.querySelector(".form-book");
+    // getting and setting data from the form 
+    form.addEventListener("submit", function(e){
+        e.preventDefault();
+        
+        const book_name = document.querySelector("#book_name").value;
+        const author_name = document.querySelector("#author_name").value;
+        const pages = document.querySelector("#pages").value;
+        const readStatus = document.querySelector("#status").value;
+        
+        const getHeroCard = document.querySelectorAll(".heroCard");
+        Array.from(getHeroCard).forEach(div => div.remove());
+        // myLibrary.length = 0;
+        addBookToLibary(book_name, author_name, pages, readStatus);
+        loopinThrough();
+        
+        delStatus();
+    });
+}
+
+getFormData();
+
+
+
