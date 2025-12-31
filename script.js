@@ -18,6 +18,14 @@ function Book (name, author, pages, readStatus) {
 
 }
 
+Book.prototype.toggleRead = function () {
+    if (this.readStatus === "read"){
+        return this.readStatus == "yet to read"
+    } else if (this.readStatus == "yet to read") {
+        return this.readStatus == "read";
+    }
+}
+
 // adding books to the lib
 function addBookToLibary(name, author, pages, readStatus) {
     const book = new Book(name, author, pages, readStatus);
@@ -123,6 +131,7 @@ function creatingDivs(title, author, pages, idd, read) {
     const readInfo = document.createElement("div");
     readInfo.className = "readInfo";
     readInfo.textContent = read;
+    readInfo.id = `ri${idd}`;
     getReadStatusContainer.appendChild(readInfo);
 
     
@@ -142,6 +151,22 @@ function creatingDivs(title, author, pages, idd, read) {
     delBtn.dataset.id = `${idd}`;
     getDelBtnCont.appendChild(delBtn); 
 
+
+    ////////////////////////////////
+
+    // read changer button container 
+    const readChangerContainer = document.createElement("div");
+    readChangerContainer.classList = "readChangerContainer";
+    readChangerContainer.id = `rc${idd}`;
+    getHeroCard.appendChild(readChangerContainer);
+    const getReadChangerContainer = document.querySelector(`#rc${idd}`);
+
+    // read changer button
+    const readChangerBtn = document.createElement("button");
+    readChangerBtn.classList = "readChangerButton";
+    readChangerBtn.textContent = "read it";
+    readChangerBtn.dataset.id = `${idd}`;
+    getReadChangerContainer.appendChild(readChangerBtn);
     
 }
 
@@ -197,6 +222,34 @@ function delStatus (){
 }
 
 delStatus();
+
+function changeReadStatus () {
+    let getReadButton = document.querySelectorAll(".readChangerButton");
+
+    myLibrary.forEach(stuff => {
+        getReadButton.forEach(readbtn => {
+            readbtn.addEventListener("mouseup", (e) => {
+                console.log("hi");
+                if(stuff.id == readbtn.dataset.id){
+                    console.log("toggle");
+                    // stuff.toggleRead();
+                    const getReadInfo = document.querySelector(`[id*=ri${stuff.id}]`)
+
+                    if (stuff.readStatus == "read"){
+                        stuff.readStatus = "yet to read";
+                        getReadInfo.textContent = "yet to read";
+                    } else if (stuff.readStatus == "yet to read"){
+                        stuff.readStatus = "read";
+                        getReadInfo.textContent = "read";   
+                    }
+
+                }
+            })
+        })
+    })
+}
+
+changeReadStatus();
 
 function getFormData (){
 
